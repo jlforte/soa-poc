@@ -1,0 +1,4 @@
+<jbossesb-deployment>
+    <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_Request_esb</depends>
+    <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_Request_gw</depends>
+</jbossesb-deployment>
