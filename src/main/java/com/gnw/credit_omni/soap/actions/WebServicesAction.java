@@ -10,25 +10,22 @@ import org.jboss.soa.esb.helpers.ConfigTree;
 import org.jboss.soa.esb.message.Message;
 
 
-public class ResponseHandlerAction extends AbstractActionLifecycle
+public class WebServicesAction extends AbstractActionLifecycle
 {
+
 	protected ConfigTree config;
-	private static final String TIMESTAMP_ATTR_NAME = "timestamp";
-	private static Logger log = Logger.getLogger(ResponseHandlerAction.class);
+	private static final String SCORE_TYPE_ATTR_NAME = "scoreType";
+	private static Logger log = Logger.getLogger(WebServicesAction.class);
 
 	//Constructor
-	public ResponseHandlerAction(ConfigTree config) {
+	public WebServicesAction(ConfigTree config){
 		this.config = config;
 	}
 
 	//The Process Method
 	public Message process(Message message) throws ActionProcessingException,FileNotFoundException,IOException 
-	
 	{
-		// add a timestamp to the message body preserving any existing contents	
-		message.getBody().add(TIMESTAMP_ATTR_NAME, String.valueOf(System.currentTimeMillis()));
-
-		log.info("ResponseHandlerAction.process: adding attribute=" + TIMESTAMP_ATTR_NAME + " value=" + message.getBody().get(TIMESTAMP_ATTR_NAME));
+		log.info("WebServicesAction.process: message.get('scoreType')= " + message.getBody().get(SCORE_TYPE_ATTR_NAME));
 
 		return message;
 	}	

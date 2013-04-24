@@ -14,37 +14,26 @@ import org.jboss.soa.esb.message.format.MessageFactory;
 
 public class OMNIScoreCalculatorAction extends AbstractActionLifecycle
 {
-	//The Name of the csv file to pull from.
-	private String fileName;
+	protected ConfigTree config;
 
-	//The Config Tree
-	protected ConfigTree _config;
-
+	public static final String OMNI_SCORE_ATTR_NAME  = "OMNI_Score";
+	public static final String OMNI_SCORE_VALUE      = "777";
+	
 	private static Logger log = Logger.getLogger(OMNIScoreCalculatorAction.class);
 
 	//Constructor
-	public OMNIScoreCalculatorAction(ConfigTree config)
-	{
-		_config = config;
-	}
-
-	//Setter
-	public void setFileName(String fileName) 
-	{
-		this.fileName = fileName;
+	public OMNIScoreCalculatorAction(ConfigTree config){
+		this.config = config;
 	}
 
 	//The Process Method
 	public Message process(Message message) throws ActionProcessingException,FileNotFoundException,IOException 
 	{
-		//Open the file stream
-		File file = new File(_config.getAttribute("fileName"));
 
-		//Create a new message object, add the list to the message body.
-		message = MessageFactory.getInstance().getMessage();
-		message.getBody().add("fileName", file.getAbsolutePath());
+		// add the OMNI score to the message body preserving any existing contents	
+		message.getBody().add(OMNI_SCORE_ATTR_NAME, OMNI_SCORE_VALUE);
 
-		log.info("ProcessOmniRequestAction: message.get('fileName')= " + message.getBody().get("fileName"));
+		log.info("OMNIScoreCalculatorAction.process: adding attribute=" + OMNI_SCORE_ATTR_NAME + " value=" + message.getBody().get(OMNI_SCORE_ATTR_NAME));
 
 		return message;
 	}	

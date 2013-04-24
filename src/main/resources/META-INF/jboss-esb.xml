@@ -16,22 +16,72 @@
         </jms-provider>
     </providers>
     <services>
- 		<service category="Credit"
-			description="Processes credit requests"
-			invmScope="GLOBAL" name="ProcessCreditRequests">
+ 		<service 
+ 		    category="Credit"
+ 		    name="ProcessCreditRequests"
+			description="Processes credit requests">
+			<listeners>
+				<jms-listener name="JMS-Gateway" 
+				              busidref="gnwCreditOmniGwChannel"
+					          is-gateway="true" />
+				<jms-listener name="ESB" 
+				              busidref="gnwCreditOmniEsbChannel" />
+			</listeners>
 			<actions mep="OneWay">
 				<action
 					class="com.gnw.credit_omni.soap.actions.IncomingRequestGatewayAction"
 					name="IncomingRequestGateway">
 				</action>
+			</actions>
+		</service>
+  		<service 
+  		    category="OMNI"
+  		    name="OMNI"
+			description="Handle OMNI Score Requests">
+			<listeners>
+				<jms-listener name="JMS-Gateway" 
+				              busidref="gnwCreditOmniGwChannel"
+					          is-gateway="true" />
+				<jms-listener name="ESB" 
+				              busidref="gnwCreditOmniEsbChannel" />
+			</listeners>
+			<actions mep="OneWay">
 				<action
 					class="com.gnw.credit_omni.soap.actions.OMNIScoreCalculatorAction"
 					name="CalculateOMNIScore">
 				</action>
+			</actions>
+		</service>
+  		<service 
+  		    category="CreditBureauWebServices"
+  		    name="CreditBureauWebServices"
+			description="Credit Bureau Web Services">
+			<listeners>
+				<jms-listener name="JMS-Gateway" 
+				              busidref="gnwCreditOmniGwChannel"
+					          is-gateway="true" />
+				<jms-listener name="ESB" 
+				              busidref="gnwCreditOmniEsbChannel" />
+			</listeners>
+			<actions mep="OneWay">
 				<action
 					class="com.gnw.credit_omni.soap.actions.WebServicesAction"
 					name="WebServices">
 				</action>
+			</actions>
+		</service>
+  		<service 
+  		    category="IIMSResponse"
+  		    name="IIMSResponse"
+			description="IIMS Response">
+			<listeners>
+				<jms-listener name="JMS-Gateway" 
+				              busidref="gnwCreditOmniGwChannel"
+					          is-gateway="true" />
+				<jms-listener name="ESB" 
+				              busidref="gnwCreditOmniEsbChannel" />
+			</listeners>
+			<actions mep="OneWay">
 				<action
 					class="com.gnw.credit_omni.soap.actions.ResponseHandlerAction"
 					name="ResponseHandler">

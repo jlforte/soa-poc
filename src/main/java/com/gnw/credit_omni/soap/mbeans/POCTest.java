@@ -5,6 +5,8 @@ import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.message.format.MessageFactory;
 import org.jboss.soa.esb.client.ServiceInvoker;
 
+import com.gnw.credit_omni.soap.utils.SOAPUtils;
+
 public class POCTest implements POCTestMBean
 {
 	private static Logger log = Logger.getLogger(POCTest.class);
@@ -18,7 +20,7 @@ public class POCTest implements POCTestMBean
 
 		Message esbMessage = MessageFactory.getInstance().getMessage();
 		
-		esbMessage.getBody().add("scoreType", "OMNIScoreCalculatorAction");
+		esbMessage.getBody().add("scoreType", SOAPUtils.SCORE_TYPE_OMNI);
 		esbMessage.getBody().add("cutomerId", "1234");
 		esbMessage.getBody().add("firstName", "David");
 		esbMessage.getBody().add("lastName",  "Suzuki");
@@ -26,7 +28,7 @@ public class POCTest implements POCTestMBean
 				
 		ServiceInvoker invoker;
 
-		invoker = new ServiceInvoker("RequestHandler", "HandleIncomingRequest");
+		invoker = new ServiceInvoker(SOAPUtils.SERVICE_CATAEGORY_CREDIT, SOAPUtils.SERVICE_NAME_PROCESS_CREDIT_REQUESTS);
 		invoker.deliverAsync(esbMessage);
 		
 		log.info("SOAPUtils.deliver: return");
