@@ -1,9 +1,12 @@
 package com.gnw.credit_omni.soap.mbeans;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
+import org.jboss.soa.esb.client.ServiceInvoker;
 import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.message.format.MessageFactory;
-import org.jboss.soa.esb.client.ServiceInvoker;
 
 import com.gnw.credit_omni.soap.utils.SOAPUtils;
 
@@ -20,13 +23,23 @@ public class POCTest implements POCTestMBean
 
 		Message esbMessage = MessageFactory.getInstance().getMessage();
 		
-		esbMessage.getBody().add("scoreType", SOAPUtils.SCORE_TYPE_OMNI);
-		esbMessage.getBody().add("cutomerId", "1234");
-		esbMessage.getBody().add("firstName", "David");
-		esbMessage.getBody().add("lastName",  "Suzuki");
-		esbMessage.getBody().add("city",      "Toronto");
+//		esbMessage.getBody().add("scoreType", SOAPUtils.SCORE_TYPE_OMNI);
+//		esbMessage.getBody().add("cutomerId", "1234");
+//		esbMessage.getBody().add("firstName", "David");
+//		esbMessage.getBody().add("lastName",  "Suzuki");
+//		esbMessage.getBody().add("city",      "Toronto");
 				
+		Map<String, Object> bodyMap = new HashMap<String, Object>();
+		bodyMap.put("scoreType", SOAPUtils.SCORE_TYPE_OMNI);
+		bodyMap.put("customerId", "1234");
+		bodyMap.put("firstName", "David");
+		bodyMap.put("lastName",  "Suzuki");
+		bodyMap.put("city", "Toronto");
+		
+		esbMessage.getBody().add(bodyMap);
 		ServiceInvoker invoker;
+		
+		log.info("About to invoke service");
 
 		invoker = new ServiceInvoker(SOAPUtils.SERVICE_CATAEGORY_CREDIT, SOAPUtils.SERVICE_NAME_PROCESS_CREDIT_REQUESTS);
 		invoker.deliverAsync(esbMessage);

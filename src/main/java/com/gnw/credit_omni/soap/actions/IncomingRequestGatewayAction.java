@@ -27,10 +27,12 @@ public class IncomingRequestGatewayAction extends AbstractActionLifecycle
 	//The Process Method
 	public Message process(Message message) throws ActionProcessingException,FileNotFoundException,IOException 
 	{
+		log.info("Entering process method of Incoming RequestGateway Action");
 		//	Examine the incoming message and route based on the scoreType in the message body
 		
 		message = MessageFactory.getInstance().getMessage();
 		
+		log.info("message: " + message.getBody().toString());
 		String scoreType = (String)message.getBody().get("scoreType");
 		
 		//
