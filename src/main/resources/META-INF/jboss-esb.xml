@@ -12,7 +12,21 @@
                         dest-type="QUEUE"
                         dest-name="queue/gnw_credit_omni_Request_esb"/>
             </jms-bus>
-
+             <jms-bus busid="gnwOmniEsbChannel">
+                <jms-message-filter
+                        dest-type="QUEUE"
+                        dest-name="queue/gnw_omni_Request_esb"/>
+            </jms-bus>
+            <jms-bus busid="gnwCreditOmniEsbWebServiceChannel">
+                <jms-message-filter
+                        dest-type="QUEUE"
+                        dest-name="queue/gnw_credit_omni_webservice_Request_esb"/>
+            </jms-bus>
+            <jms-bus busid="gnwCreditOmniEsbResponseChannel">
+                <jms-message-filter
+                        dest-type="QUEUE"
+                        dest-name="queue/gnw_credit_omni_response_Request_esb"/>
+            </jms-bus>
         </jms-provider>
     </providers>
     <services>
@@ -39,11 +53,13 @@
   		    name="OMNI"
 			description="Handle OMNI Score Requests">
 			<listeners>
+				<!--
 				<jms-listener name="JMS-Gateway" 
 				              busidref="gnwCreditOmniGwChannel"
 					          is-gateway="true" />
+				-->
 				<jms-listener name="ESB" 
-				              busidref="gnwCreditOmniEsbChannel" />
+				              busidref="gnwOmniEsbChannel" />
 			</listeners>
 			<actions mep="OneWay">
 				<action
@@ -57,11 +73,13 @@
   		    name="CreditBureauWebServices"
 			description="Credit Bureau Web Services">
 			<listeners>
+			<!--  
 				<jms-listener name="JMS-Gateway" 
 				              busidref="gnwCreditOmniGwChannel"
 					          is-gateway="true" />
+			-->
 				<jms-listener name="ESB" 
-				              busidref="gnwCreditOmniEsbChannel" />
+				              busidref="gnwCreditOmniEsbWebServiceChannel" />
 			</listeners>
 			<actions mep="OneWay">
 				<action
@@ -75,11 +93,13 @@
   		    name="IIMSResponse"
 			description="IIMS Response">
 			<listeners>
+			<!--  
 				<jms-listener name="JMS-Gateway" 
 				              busidref="gnwCreditOmniGwChannel"
 					          is-gateway="true" />
+			-->
 				<jms-listener name="ESB" 
-				              busidref="gnwCreditOmniEsbChannel" />
+				              busidref="gnwCreditOmniEsbResponseChannel" />
 			</listeners>
 			<actions mep="OneWay">
 				<action

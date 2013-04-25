@@ -1,50 +1,36 @@
 package com.gnw.credit_omni.soap.actions;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jboss.soa.esb.actions.AbstractActionLifecycle;
 import org.jboss.soa.esb.actions.ActionProcessingException;
 import org.jboss.soa.esb.helpers.ConfigTree;
 import org.jboss.soa.esb.message.Message;
-import org.jboss.soa.esb.message.format.MessageFactory;
+
+import com.gnw.credit_omni.soap.utils.SOAPUtils;
 
 
 public class RetrieveCreditScoresFromCacheAction extends AbstractActionLifecycle
 {
-	//The Name of the csv file to pull from.
-	private String fileName;
-
 	//The Config Tree
-	protected ConfigTree _config;
+	protected ConfigTree config;
 
 	private static Logger log = Logger.getLogger(RetrieveCreditScoresFromCacheAction.class);
 
 	//Constructor
 	public RetrieveCreditScoresFromCacheAction(ConfigTree config)
 	{
-		_config = config;
+		this.config = config;
 	}
 
-	//Setter
-	public void setFileName(String fileName) 
-	{
-		this.fileName = fileName;
-	}
 
 	//The Process Method
 	public Message process(Message message) throws ActionProcessingException,FileNotFoundException,IOException 
 	{
-		//Open the file stream
-		File file = new File(_config.getAttribute("fileName"));
-
-		//Create a new message object, add the list to the message body.
-		message = MessageFactory.getInstance().getMessage();
-		message.getBody().add("fileName", file.getAbsolutePath());
-
-		log.info("ProcessOmniRequestAction: message.get('fileName')= " + message.getBody().get("fileName"));
+		log.info("RetrieveCreditScoresFromCacheAction.process: message contents: " + SOAPUtils.mapToString((Map<String,Object>)message.getBody()));
 
 		return message;
 	}	

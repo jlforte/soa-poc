@@ -1,4 +1,7 @@
 <jbossesb-deployment>
-    <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_Request_esb</depends>
-    <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_Request_gw</depends>
+   <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_Request_gw</depends>
+   <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_Request_esb</depends>
+   <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_omni_Request_esb</depends>
+   <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_webservice_Request_esb</depends>
+   <depends>jboss.esb.poc.destination:service=GNWCreditOmniQueue,name=gnw_credit_omni_response_Request_esb</depends>
 </jbossesb-deployment>

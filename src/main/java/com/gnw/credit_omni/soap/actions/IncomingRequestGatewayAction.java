@@ -2,6 +2,7 @@ package com.gnw.credit_omni.soap.actions;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jboss.soa.esb.actions.AbstractActionLifecycle;
@@ -15,6 +16,12 @@ import com.gnw.credit_omni.soap.utils.SOAPUtils;
 
 public class IncomingRequestGatewayAction extends AbstractActionLifecycle
 {
+	private static final String TRUE = "true";
+
+	private static final String SCORE_TYPE_ATTR_NAME = "scoreType";
+
+	private static final String PROCESSED_FLAG_ATTR_NAME = "processedFlag";
+
 	protected ConfigTree config;
 
 	private static Logger log = Logger.getLogger(IncomingRequestGatewayAction.class);
@@ -27,51 +34,82 @@ public class IncomingRequestGatewayAction extends AbstractActionLifecycle
 	//The Process Method
 	public Message process(Message message) throws ActionProcessingException,FileNotFoundException,IOException 
 	{
-		log.info("Entering process method of Incoming RequestGateway Action");
-		//	Examine the incoming message and route based on the scoreType in the message body
+		log.info("IncomingRequestGatewayAction.process: entry: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag")); 
 		
-		message = MessageFactory.getInstance().getMessage();
+		log.debug("IncomingRequestGatewayAction.process: entry: message: " + SOAPUtils.messageToString(message) + 
+				  " header: " + message.getHeader() + 
+				  " context: " + message.getContext());
 		
-		log.info("message: " + message.getBody().toString());
-		String scoreType = (String)message.getBody().get("scoreType");
+		//	skip messages that have been processed
+		String processedFlag = SOAPUtils.getValueOfAttributeInMessage(message, PROCESSED_FLAG_ATTR_NAME);
+		log.info("IncomingRequestGatewayAction.process: processedFlag=" + processedFlag); 
+		
+		if ( processedFlag != null && processedFlag.equalsIgnoreCase(TRUE)) {
+			log.info("IncomingRequestGatewayAction.process: return: message has already been processed"); 
+			return message;
+		}
+		
+		//	mark message as processed
+		SOAPUtils.addAttributeAndValueToMessage(message, PROCESSED_FLAG_ATTR_NAME, TRUE);
+		
+		//	route the incoming message based on the score type in the message body
+		String scoreType = SOAPUtils.getValueOfAttributeInMessage(message, SCORE_TYPE_ATTR_NAME);		
 		
 		//
 		// OMNI
 		//
 		if (scoreType.equalsIgnoreCase(SOAPUtils.SCORE_TYPE_OMNI)) {
-			log.info("IncomingRequestGatewayAction.process: received OMNI Score request.  routing message to " + SOAPUtils.SERVICE_NAME_OMNI);
+			log.info("IncomingRequestGatewayAction.process: received OMNI Score request"); 
+			log.info("IncomingRequestGatewayAction.process: routing message to " + SOAPUtils.SERVICE_NAME_OMNI);
 			routeMessage(message, SOAPUtils.SERVICE_CATAEGORY_OMNI, SOAPUtils.SERVICE_NAME_OMNI, scoreType);
 		//
 		//	OMNI + Credit Bureaus
 		//
 		} else if (scoreType.equalsIgnoreCase(SOAPUtils.SCORE_TYPE_OMNI_AND_CREDIT)) {
-			log.info("IncomingRequestGatewayAction.process: received OMNI + Credit request.  routing message to " + SOAPUtils.SERVICE_CATAEGORY_OMNI + 
-					 " and " + SOAPUtils.SERVICE_CATAEGORY_WEBSERVICES);
+			log.info("IncomingRequestGatewayAction.process: received OMNI + Credit request"); 
+			log.info("IncomingRequestGatewayAction.process: routing message to " + SOAPUtils.SERVICE_CATAEGORY_OMNI);
 			routeMessage(message, SOAPUtils.SERVICE_CATAEGORY_OMNI,        SOAPUtils.SERVICE_NAME_OMNI, scoreType);
+			log.info("IncomingRequestGatewayAction.process: routing message to " + SOAPUtils.SERVICE_NAME_WEBSERVICES);
 			routeMessage(message, SOAPUtils.SERVICE_CATAEGORY_WEBSERVICES, SOAPUtils.SERVICE_NAME_WEBSERVICES, scoreType);
 		//
 		//	flag unknown score type as an error
 		//
 		} else {
-			log.error("IncomingRequestGatewayAction.process: received unknown score type request: " + scoreType);
+			log.error("IncomingRequestGatewayAction.process: received unknown score type request: " + scoreType +
+					  " message: " + SOAPUtils.messageToString(message) + " message header: " + message.getHeader());
 		}
+		
+
+		log.info("IncomingRequestGatewayAction.process: return: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag"));
 		
 		return message;
 	}
 	
 	/**
 	 * @param message
-	 * @param category
-	 * @param name
+	 * @param serviceCategory
+	 * @param serviceName
 	 * @param scoreType
 	 */
-	public void routeMessage(Message message, String category, String name, String scoreType) {
+	public void routeMessage(Message message, String serviceCategory, String serviceName, String scoreType) {
+		log.debug("IncomingRequestGatewayAction.routeMessage: entry: message: " + SOAPUtils.messageToString(message) + 
+				 " serviceCategory=" + serviceCategory + 
+				 " serviceName="     + serviceName     + 
+				 " scoreType="       + scoreType);
 		try {
-			SOAPUtils.routeESBMessage(message, category, name);
+			SOAPUtils.routeESBMessage(message, serviceCategory, serviceName);
 		} catch (Exception e) {
-			log.error("IncomingRequestGatewayAction.routeMessage: received unknown score type request: " + scoreType);
+			log.error("IncomingRequestGatewayAction.routeMessage: caught Exception " + e + " on esb message: " +  SOAPUtils.messageToString(message) + 
+				      " serviceCategory="    + serviceCategory + 
+				 	  " serviceName="        + serviceName     + 
+					  " scoreType="          + scoreType       +
+					  " exception message: " + e.getMessage());
 		}
-		
+		log.debug("IncomingRequestGatewayAction.routeMessage: return");		
 	}
 
 }
