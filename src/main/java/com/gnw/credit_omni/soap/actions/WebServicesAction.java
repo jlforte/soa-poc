@@ -45,4 +45,26 @@ public class WebServicesAction extends AbstractActionLifecycle
 		return message;
 	}	
 
+	/**
+	 * default success handler
+	 * @param message
+	 */
+	public void processSuccess(Message message) {
+		log.info("WebServicesAction.processSuccess: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SOAPUtils.SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag")); 
+	}
+	
+	/**
+	 * @param message
+	 * @param th
+	 */
+	public void processException(Message message, java.lang.Throwable th) {
+		log.info("WebServicesAction.processException: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SOAPUtils.SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag") +
+				 " exception: " + th + 
+				 " exception message: " + th.getMessage()); 
+	}
+
 }

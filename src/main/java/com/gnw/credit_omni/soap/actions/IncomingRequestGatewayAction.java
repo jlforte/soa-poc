@@ -2,14 +2,12 @@ package com.gnw.credit_omni.soap.actions;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jboss.soa.esb.actions.AbstractActionLifecycle;
 import org.jboss.soa.esb.actions.ActionProcessingException;
 import org.jboss.soa.esb.helpers.ConfigTree;
 import org.jboss.soa.esb.message.Message;
-import org.jboss.soa.esb.message.format.MessageFactory;
 
 import com.gnw.credit_omni.soap.utils.SOAPUtils;
 
@@ -111,5 +109,26 @@ public class IncomingRequestGatewayAction extends AbstractActionLifecycle
 		}
 		log.debug("IncomingRequestGatewayAction.routeMessage: return");		
 	}
-
+	
+	/**
+	 * default success handler
+	 * @param message
+	 */
+	public void processSuccess(Message message) {
+		log.info("IncomingRequestGatewayAction.processSuccess: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag")); 
+	}
+	
+	/**
+	 * @param message
+	 * @param th
+	 */
+	public void processException(Message message, java.lang.Throwable th) {
+		log.info("IncomingRequestGatewayAction.processException: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag") +
+				 " exception: " + th + 
+				 " exception message: " + th.getMessage()); 
+	}
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <server>
-	<mbean code="com.gnw.credit_omni.soap.mbeans.POCTest" name="gnw.credit_omni.com:service=POCTest"/>
+	<mbean code="com.gnw.credit_omni.soap.mbeans.POCTest1" name="gnw.credit_omni.com:service=POCTest1"/>
+	<mbean code="com.gnw.credit_omni.soap.mbeans.POCTest2" name="gnw.credit_omni.com:service=POCTest2"/>
 </server>

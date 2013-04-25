@@ -34,6 +34,7 @@ public class ResponseHandlerAction extends AbstractActionLifecycle
 		log.debug("ResponseHandlerAction.process: entry: message: " + SOAPUtils.messageToString(message) + 
 				  " header: "  + message.getHeader() + 
 				  " context: " + message.getContext());
+		
 		String ts = String.valueOf(System.currentTimeMillis());
 		
 		log.debug("ResponseHandlerAction.process: adding attribute=" + TIMESTAMP_ATTR_NAME + " value=" + ts);
@@ -49,5 +50,27 @@ public class ResponseHandlerAction extends AbstractActionLifecycle
 		
 		return message;
 	}	
+	
+	/**
+	 * default success handler
+	 * @param message
+	 */
+	public void processSuccess(Message message) {
+		log.info("ResponseHandlerAction.processSuccess: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SOAPUtils.SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag")); 
+	}
+	
+	/**
+	 * @param message
+	 * @param th
+	 */
+	public void processException(Message message, java.lang.Throwable th) {
+		log.info("ResponseHandlerAction.processException: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SOAPUtils.SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag") +
+				 " exception: " + th + 
+				 " exception message: " + th.getMessage()); 
+	}
 
 }

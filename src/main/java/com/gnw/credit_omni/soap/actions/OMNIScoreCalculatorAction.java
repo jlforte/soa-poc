@@ -49,6 +49,27 @@ public class OMNIScoreCalculatorAction extends AbstractActionLifecycle
 				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag"));
 
 		return message;
-	}	
-
+	}
+	
+	/**
+	 * default success handler
+	 * @param message
+	 */
+	public void processSuccess(Message message) {
+		log.info("OMNIScoreCalculatorAction.processSuccess: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SOAPUtils.SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag")); 
+	}
+	
+	/**
+	 * @param message
+	 * @param th
+	 */
+	public void processException(Message message, java.lang.Throwable th) {
+		log.info("OMNIScoreCalculatorAction.processException: scoreType=" + SOAPUtils.getValueOfAttributeInMessage(message, SOAPUtils.SCORE_TYPE_ATTR_NAME) +
+				 " messageId=" + SOAPUtils.getValueOfAttributeInMessage(message, "messageID") +
+				 " processedFlag=" + SOAPUtils.getValueOfAttributeInMessage(message, "processedFlag") +
+				 " exception: " + th + 
+				 " exception message: " + th.getMessage()); 
+	}
 }

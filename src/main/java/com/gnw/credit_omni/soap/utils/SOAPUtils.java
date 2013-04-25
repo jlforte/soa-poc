@@ -1,12 +1,10 @@
 package com.gnw.credit_omni.soap.utils;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jboss.soa.esb.message.Message;
-import org.jboss.soa.esb.message.format.MessageFactory;
 import org.jboss.soa.esb.client.ServiceInvoker;
+import org.jboss.soa.esb.message.Message;
 
 public class SOAPUtils 
 {
@@ -24,6 +22,16 @@ public class SOAPUtils
 	public static final String SERVICE_NAME_OMNI                    = "OMNI";
 	public static final String SERVICE_NAME_WEBSERVICES             = "CreditBureauWebServices";
 	public static final String SERVICE_NAME_IIMS_RESPONSE           = "IIMSResponse";
+	
+	// attribute names
+	public static final String SCORE_TYPE_ATTR_NAME                 = "scoreType";
+	public static final String CUSTOMER_ID_ATTR_NAME                = "customerId";
+	public static final String FIRST_NAME_ATTR_NAME                 = "firstName";
+	public static final String LAST_NAME_ATTR_NAME                  = "lastName";
+	public static final String CITY_ATTR_NAME                       = "city";
+	public static final String MESSAGE_ID_ATTR_NAME                 = "messageID";
+	public static final String PROCESSED_FLAG_ATTR_NAME             = "processedFlag";
+	
 	private static Logger log = Logger.getLogger(SOAPUtils.class);
 
 	/**

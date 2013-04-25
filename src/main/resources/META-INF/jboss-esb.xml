@@ -33,7 +33,8 @@
  		<service 
  		    category="Credit"
  		    name="ProcessCreditRequests"
-			description="Processes credit requests">
+			description="Processes credit requests"
+			invmScope="GLOBAL">
 			<listeners>
 				<jms-listener name="JMS-Gateway" 
 				              busidref="gnwCreditOmniGwChannel"
@@ -51,7 +52,8 @@
   		<service 
   		    category="OMNI"
   		    name="OMNI"
-			description="Handle OMNI Score Requests">
+			description="Handle OMNI Score Requests"
+			invmScope="GLOBAL">
 			<listeners>
 				<!--
 				<jms-listener name="JMS-Gateway" 
@@ -71,7 +73,8 @@
   		<service 
   		    category="CreditBureauWebServices"
   		    name="CreditBureauWebServices"
-			description="Credit Bureau Web Services">
+			description="Credit Bureau Web Services"
+			invmScope="GLOBAL">
 			<listeners>
 			<!--  
 				<jms-listener name="JMS-Gateway" 
@@ -91,7 +94,8 @@
   		<service 
   		    category="IIMSResponse"
   		    name="IIMSResponse"
-			description="IIMS Response">
+			description="IIMS Response"
+			invmScope="GLOBAL">
 			<listeners>
 			<!--  
 				<jms-listener name="JMS-Gateway" 
